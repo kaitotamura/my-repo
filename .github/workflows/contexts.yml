@@ -6,5 +6,6 @@ jobs:
     steps:
       - run: |
           echo "${{ github.run_id }}"
-          echo "${{github.head_ref}}"
-          echo "${{github.workspace}}"
+          echo "${{github.repository}}"
+          echo "${{github.repository_owner}}"
+          echo "${{github.event}}"
