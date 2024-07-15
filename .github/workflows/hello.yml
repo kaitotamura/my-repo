@@ -1,7 +1,8 @@
-name: YAML error
+name: Hello
 on: push
 jobs:
-  run:
+  hello:
     runs-on: ubuntu-latest
-      steps:                          # インデントが2文字ズレている！
-      - run: echo "YAML Syntax Error"
+    steps:
+      - run: echo "hello, world"
+      - uses: actions/checkout@v4
