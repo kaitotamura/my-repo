@@ -3,8 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       greeting:
-        type: string
-        default: Hello
+        type: choice
+        options:
+          - info
+          - warn
+          - error
+
         required: true
         description: Acheerful word
 jobs:
