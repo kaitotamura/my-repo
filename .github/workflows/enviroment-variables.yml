@@ -1,5 +1,8 @@
 name: Enviroment variables
-on: push
+on:
+  push:
+    branches:
+      - 'feature'
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -8,6 +11,8 @@ jobs:
     steps:
       - run: echo "${BRANCH}"
       - uses: actions/checkout@v4
-   
+        with:
+          ref: ${{env.BRANCH}}
+
       - name: show all branches after checkout
         run: git branch -a    
