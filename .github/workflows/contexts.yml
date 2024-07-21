@@ -1,21 +1,15 @@
-name: command
-on: [push]
+name: Enviroment variables
+on: push
 jobs:
-  command:
-    name: Use Linux commands
-    runs-on: ubuntu-20.04
+  run:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: main
     steps:
-      - name: Show ubuntu details
-        run: lsb_release -a
-      - name: Inspect files before checkout
-        run: ls -la
-      - name: show current directory before checkout
-        run: pwd
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Inspect files after checkout
-        run: ls -la
-      - name: show current directory after checkout
-        run: pwd
+      - run: echo "${BRANCH}"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{env.BRANCH}}
+
       - name: show all branches after checkout
-        run: git branch -a
+        run: git branch -a    
