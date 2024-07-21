@@ -2,7 +2,7 @@ name: Enviroment variables
 on:
   push:
     branches:
-      - 'feature'
+      - 'feature-sample'
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -16,3 +16,10 @@ jobs:
 
       - name: show all branches after checkout
         run: git branch -a    
+
+      - name: get current branch name # ソースブランチ（変更を提案する側）を取得
+        run: echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV  
+
+      - name: get latest commit hash and use current branch # ソースブランチから最新のコミットハッシュ情報を取得
+        run: |
+          git fetch origin "${current_branch}"  
