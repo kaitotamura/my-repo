@@ -1,16 +1,21 @@
-name: Contexts
-on: push
+name: command
+on: [push]
 jobs:
-  print:
-    runs-on: ubuntu-latest
+  command:
+    name: Use Linux commands
+    runs-on: ubuntu-20.04
     steps:
-      - run: |
-          echo "${{ github.run_id }}"
-          echo "${{github.action}}"
-          echo "${{github.action_path}}"
-          echo "${{github.action_ref}}"
-          echo "${{github.action_repository}}"
-          echo "${{github.action_status}}"
-          echo "${{github.actor_id}}"
-          echo "${{github.api_url}}"
-          echo "${{github.base_ref}}"
+      - name: Show ubuntu details
+        run: lsb_release -a
+      - name: Inspect files before checkout
+        run: ls -la
+      - name: show current directory before checkout
+        run: pwd
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Inspect files after checkout
+        run: ls -la
+      - name: show current directory after checkout
+        run: pwd
+      - name: show all branches after checkout
+        run: git branch -a
