@@ -1,0 +1,11 @@
+name: Contexts
+on:
+  push:
+    branches:
+      - "feature"
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.actor }}" # githubコンテキストの参照
+      - run: echo "${GITHUB_ACTOR}"

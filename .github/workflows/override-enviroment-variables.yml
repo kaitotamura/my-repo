@@ -2,7 +2,7 @@ name: Overiride
 on:
   push:
     branches:
-      - "feature"
+      - "feature-sample"
 env:
   EXAMPLE: Defined by workflow level
 jobs:
