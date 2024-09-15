@@ -9,6 +9,8 @@ jobs:
     env:
       BRANCH: main
     steps:
+      - name: show all branches after checkout
+        run: git branch -a
       - run: echo "${BRANCH}"
       - uses: actions/checkout@v4
         with:
