@@ -1,0 +1,12 @@
+name: intermediate-environment-variables
+on:
+  push:
+    branches:
+      - "feature-sap"
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    env:
+      ACTOR: ${{github.actor}}
+    steps:
+      - run: echo "${ACTOR}"

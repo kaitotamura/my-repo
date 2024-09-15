@@ -2,7 +2,7 @@ name: Enviroment variables
 on:
   push:
     branches:
-      - "feature-sample"
+      - "feature"
 jobs:
   run:
     runs-on: ubuntu-latest
