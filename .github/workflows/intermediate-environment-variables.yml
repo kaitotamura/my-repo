@@ -2,7 +2,7 @@ name: intermediate-environment-variables
 on:
   push:
     branches:
-      - "feature-sap"
+      - "feature"
 jobs:
   print:
     runs-on: ubuntu-latest

@@ -2,19 +2,14 @@ name: Enviroment variables
 on:
   push:
     branches:
-      - "feature"
+      - "feature-sam"
 jobs:
   run:
     runs-on: ubuntu-latest
     env:
       BRANCH: main
     steps:
-      - name: show all branches after checkout
-        run: git branch -a
       - run: echo "${BRANCH}"
       - uses: actions/checkout@v4
         with:
           ref: ${{env.BRANCH}}
-
-      - name: show all branches after checkout
-        run: git branch -a
