@@ -1,4 +1,4 @@
-name: intermediate-environment-variables
+name: Secrets
 on:
   push:
     branches:
@@ -7,6 +7,7 @@ jobs:
   print:
     runs-on: ubuntu-latest
     env:
-      USERNAME: ${{ vars.USERNAME}}
+      PASSWORD: ${{ secrets.PASSWORD}}
     steps:
-      - run: echo "${USERNAME}"
+      - run: echo "${PASSWORD}"
+      - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"
