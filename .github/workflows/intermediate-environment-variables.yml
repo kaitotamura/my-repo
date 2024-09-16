@@ -7,7 +7,7 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - run: printenv | grep `LITERAL_`
+      - run: printenv | grep 'LITERAL_'
         env:
           LITERAL_NULL: ${{ null }} # null型
           LITERAL_BOOLEAN: ${{ true }} # boolean型
