@@ -1,0 +1,4 @@
+rules:
+  title:
+    regex: ^\[JIRA-[0-9]+\]
+    error: "Pull Request title must start with '[JIRA-<ID>]'"
