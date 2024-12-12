@@ -33,3 +33,11 @@ jobs:
           else
             echo "PR title is valid."
           fi
+      - name: Check if GITHUB_TOKEN is set
+        run: |
+          if [ -z "$GITHUB_TOKEN" ]; then
+            echo "GITHUB_TOKEN is not set."
+            exit 1
+          else
+            echo "GITHUB_TOKEN is set."
+          fi  
