@@ -2,17 +2,47 @@ name: PR Title Validation
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, edited, synchronize]
 
 jobs:
   validate-title:
     runs-on: ubuntu-latest
     steps:
-      - name: Check PR Title
+      # PRタイトルを検証し、カスタムステータスを作成
+      - name: Report custom status
         uses: actions/github-script@v6
         with:
           script: |
             const prTitle = context.payload.pull_request.title;
-            if (!prTitle.includes("JIRA-")) {
-              core.setFailed('Pull Request title must include "JIRA-".');
+            const checkName = "PR Title Validation"; // ステータスチェックの名前
+            const headSha = context.payload.pull_request.head.sha; // 現在のコミットSHA
+
+            // PRタイトルに "JIRA-" が含まれているかをチェック
+            if (prTitle.includes("JIRA-")) {
+              github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: checkName, // ステータスチェックの名前
+                head_sha: headSha,
+                status: "completed",
+                conclusion: "success", // 成功とマーク
+                output: {
+                  title: "PR Title Validation Passed",
+                  summary: "The PR title includes 'JIRA-'."
+                }
+              });
+            } else {
+              github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: checkName,
+                head_sha: headSha,
+                status: "completed",
+                conclusion: "failure", // 失敗とマーク
+                output: {
+                  title: "PR Title Validation Failed",
+                  summary: "The PR title must include 'JIRA-'."
+                }
+              });
+              core.setFailed("Pull Request title validation failed.");
             }
