@@ -1,0 +1,18 @@
+name: PR Title Validation
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  validate-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR Title
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prTitle = context.payload.pull_request.title;
+            if (!prTitle.includes("JIRA-")) {
+              core.setFailed('Pull Request title must include "JIRA-".');
+            }
