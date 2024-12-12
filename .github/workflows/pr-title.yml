@@ -1,48 +1,35 @@
-name: PR Title Validation
+name: Validate PR Title
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 jobs:
-  validate-title:
+  validate-pr-title:
     runs-on: ubuntu-latest
     steps:
-      # PRタイトルを検証し、カスタムステータスを作成
-      - name: Report custom status
-        uses: actions/github-script@v6
+      - name: Checkout repository
+        uses: actions/checkout@v2
         with:
-          script: |
-            const prTitle = context.payload.pull_request.title;
-            const checkName = "PR Title Validation"; // ステータスチェックの名前
-            const headSha = context.payload.pull_request.head.sha; // 現在のコミットSHA
+          fetch-depth: 1 # 最新のコミットのみを取得
 
-            // PRタイトルに "JIRA-" が含まれているかをチェック
-            if (prTitle.includes("JIRA-")) {
-              github.rest.checks.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                name: checkName, // ステータスチェックの名前
-                head_sha: headSha,
-                status: "completed",
-                conclusion: "success", // 成功とマーク
-                output: {
-                  title: "PR Title Validation Passed",
-                  summary: "The PR title includes 'JIRA-'."
-                }
-              });
-            } else {
-              github.rest.checks.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                name: checkName,
-                head_sha: headSha,
-                status: "completed",
-                conclusion: "failure", // 失敗とマーク
-                output: {
-                  title: "PR Title Validation Failed",
-                  summary: "The PR title must include 'JIRA-'."
-                }
-              });
-              core.setFailed("Pull Request title validation failed.");
-            }
+      - name: Validate PR Title
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Validating PR title..."
+          PR_TITLE=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+          echo "PR Title: $PR_TITLE"
+          
+          if [[ ! "$PR_TITLE" =~ ^(JREIT-[0-9]+|ReitDB-[0-9]+) ]]; then
+            echo "Invalid PR title format. Closing the PR."
+            curl -X PATCH \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} \
+              -d '{"state":"closed"}'
+          else
+            echo "PR title is valid."
+          fi
