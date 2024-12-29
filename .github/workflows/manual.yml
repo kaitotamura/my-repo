@@ -7,9 +7,8 @@ on:
         default: Hello
         required: true
         description: A cheerful word
-
-  jobs:
-    run:
-      runs-on: ubuntu-latest
-      steps:
-        -run: echo "${{ input.greeting }}"
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ inputs.greeting }}"
