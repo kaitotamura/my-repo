@@ -3,16 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       greeting:
-        type: choice
-        options:
-          - info
-          - warn
-          - error
-
+        type: string
+        default: Hello
         required: true
-        description: Acheerful word
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{inputs.greeting}}"
+        description: A cheerful word
+
+  jobs:
+    run:
+      runs-on: ubuntu-latest
+      steps:
+        -run: echo "${{ input.greeting }}"

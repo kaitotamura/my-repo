@@ -2,7 +2,7 @@ name: Secrets
 on:
   push:
     branches:
-      - "feature"
+      - "feature-sam"
 jobs:
   print:
     runs-on: ubuntu-latest
