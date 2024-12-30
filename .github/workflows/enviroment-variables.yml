@@ -1,12 +1,10 @@
-name: Enviroment variables
-on:
-  push:
-
+name: Secrets
+on: push
 jobs:
   print:
     runs-on: ubuntu-latest
     env:
-      PASSWORD: ${{secrets.PASSWORD}}
+      PASSWORD: ${{ secrets.PASSWORD }} # Secretsの参照
     steps:
-      - run: echo "${PASSWORD}"
-      - run: echo "${PASSSWORD:0:1} ${PASSWORD#?}"
+      - run: echo "${PASSWORD}" # ログ出力はマスクされる
+      - run: echo "${PASSWORD:0:1} ${PASSWORD#?}" # ログ出力はマスクされない
