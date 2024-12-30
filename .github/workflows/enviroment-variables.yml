@@ -1,13 +1,13 @@
 name: Enviroment variables
 on:
   push:
-    branches:
-      - "feature-sam"
+
 jobs:
   run:
     runs-on: ubuntu-latest
     env:
       BRANCH: main
+
     steps:
       - run: echo "${BRANCH}"
       - uses: actions/checkout@v4
