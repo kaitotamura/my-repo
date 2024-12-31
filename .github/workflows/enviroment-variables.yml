@@ -1,10 +1,10 @@
-name: Compare functions
+name: Hash functions
 on: push
 jobs:
-  dump:
+  hash:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${CONTEXT}"
-          echo "${{github}}"
+      - uses: actions/checkout@v4
+      - run: echo "${HASH}"
         env:
-          CONTEXT: ${{toJSON(github)}}
+          HASH: ${{ hashFiles('.github/workflows/*.yml') }} # ハッシュ値の生成
