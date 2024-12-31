@@ -6,6 +6,6 @@ jobs:
     steps:
       - run: printenv | grep '_FUNC'
         env:
-          CONTAINS_FUNC: ${{ contains('Hello', 'ell') }}
+          CONTAINS_FUNC: ${{ contains(github.event.issue.labels.*.name, 'bag') }}
           STARTS_WITH_FUNC: ${{ startsWith('Hello', 'He')}}
           END_WITH_FUNC: ${{ endsWith('Hello', 'lo')}}
