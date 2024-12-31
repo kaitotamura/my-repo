@@ -1,8 +1,9 @@
-name: Status check functions
+name: Naming
 on: push
 jobs:
-  fail:
-    if: ${{ github.actor == 'octocat'}}
+  print:
+    name: Super Useful Job
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello"
+      - name: Amazing Script
+        run: echo "hello"
