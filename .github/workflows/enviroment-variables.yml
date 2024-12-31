@@ -1,8 +1,8 @@
-name: Hash functions
+name: Status check functions
 on: push
 jobs:
-  skip-or-run:
+  fail:
     runs-on: ubuntu-latest
     steps:
+      - run: exit 1
       - run: echo "hello"
-        if: ${{ contains(github.run_id, '10000')}}
