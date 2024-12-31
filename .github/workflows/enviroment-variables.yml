@@ -2,8 +2,7 @@ name: Status check functions
 on: push
 jobs:
   fail:
+    if: ${{ github.actor == 'octocat'}}
     runs-on: ubuntu-latest
     steps:
-      - run: exit 1
       - run: echo "hello"
-        if: ${{ failure() }}
