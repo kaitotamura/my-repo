@@ -6,3 +6,4 @@ jobs:
     steps:
       - run: exit 1
       - run: echo "hello"
+        if: ${{ failure() }}
