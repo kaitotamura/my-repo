@@ -6,6 +6,7 @@ jobs:
     steps:
       - run: printenv | grep '_FUNC'
         env:
+          run: echo '${{ toJson(github.event.issue.labels) }}'
           CONTAINS_FUNC: ${{ contains(github.event.issue.labels.*.name, 'bag') }}
           STARTS_WITH_FUNC: ${{ startsWith('Hello', 'He')}}
           END_WITH_FUNC: ${{ endsWith('Hello', 'lo')}}
