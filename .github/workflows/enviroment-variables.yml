@@ -1,8 +1,13 @@
-name: GITHUB_OUTPUT
+name: Comment
 on: pull_request
 jobs:
-  share:
+  comment:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
     steps:
-      - id: source
-        run: echo "${GITHUB_HEAD_REF}"
+      - uses: actions/checkout@v4
+      - run: gh pr comment "${GITHUB_HEAD_REF}" --body "hello, ${GITHUB_ACTOR}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
