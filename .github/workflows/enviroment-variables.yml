@@ -1,5 +1,5 @@
 name: GITHUB_OUTPUT
-on: push
+on: pull_request
 jobs:
   share:
     runs-on: ubuntu-latest
