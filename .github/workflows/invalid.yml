@@ -1,8 +1,10 @@
-name: Concurrency
-on: push
-concurrency: ${{github.workflow}}
+name: Auto cnacel
+on: pull_request
+concurrency:
+  group: ${{github.workflow}}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   sleep:
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 60 # 2分（120秒）スリープさせる
+      - run: sleep 120 # 2分（120秒）スリープさせる
