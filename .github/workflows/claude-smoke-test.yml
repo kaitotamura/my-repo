@@ -1,8 +1,8 @@
 name: Claude Code Action smoke test
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [opened, reopened]
   workflow_dispatch:
 
 permissions:
@@ -21,14 +21,16 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.CLAUDE_API_KEY }}
           prompt: |
-            これはClaude Code Actionの思考テストです。ファイル操作は不要です。
-            以下の問題を1ステップずつ考えて解いてください。
+            このPRの変更内容を確認し、「人間によるレビューが必要かどうか」を判定してください。
+            マージやApprove等のGitHub操作は一切行わないでください。判定結果を出力するだけで構いません。
 
-            1. フィボナッチ数列の20番目の値を計算する
-            2. その値が素数かどうか判定する
-            3. 判定の根拠を簡潔に説明する
+            判定基準:
+            - 振る舞いが変わらない軽微な変更（typo修正、コメント追加、フォーマット調整等）は「レビュー不要」
+            - ロジックの変更、挙動に影響する変更は「レビュー必要」
 
-            各ステップでの考え方も示しながら、最終的な結論を出力してください。
+            出力形式:
+            - 判定: 必要 or 不要
+            - 理由: 具体的な根拠
           claude_args: |
             --max-turns 15
             --model claude-sonnet-4-6
