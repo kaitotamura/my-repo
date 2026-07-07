@@ -21,9 +21,15 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.CLAUDE_API_KEY }}
           prompt: |
-            これはClaude Code Actionの動作確認です。
-            「Claude Code Actionは正常に動作しています」という一文だけを出力してください。
+            これはClaude Code Actionの思考テストです。ファイル操作は不要です。
+            以下の問題を1ステップずつ考えて解いてください。
+
+            1. フィボナッチ数列の20番目の値を計算する
+            2. その値が素数かどうか判定する
+            3. 判定の根拠を簡潔に説明する
+
+            各ステップでの考え方も示しながら、最終的な結論を出力してください。
           claude_args: |
-            --max-turns 3
+            --max-turns 15
             --model claude-sonnet-4-6
           show_full_output: true
