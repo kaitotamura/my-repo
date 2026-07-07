@@ -33,3 +33,4 @@ jobs:
             --max-turns 15
             --model claude-sonnet-4-6
           show_full_output: true
+          track_progress: true
