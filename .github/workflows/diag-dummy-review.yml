@@ -1,0 +1,89 @@
+name: 'Dummy Review Diag'
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: '判定対象のPR番号'
+        required: true
+        type: string
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      pr_number: ${{ steps.pr.outputs.number }}
+      install_outcome: ${{ steps.install.outcome }}
+      build_outcome: ${{ steps.build.outcome }}
+      test_outcome: ${{ steps.test.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: refs/pull/${{ inputs.pr_number }}/head
+
+      - name: Resolve PR number
+        id: pr
+        run: |
+          echo "number=${{ inputs.pr_number }}" >> "$GITHUB_OUTPUT"
+
+      - name: install (dummy)
+        id: install
+        run: echo "dummy install ok"
+        continue-on-error: true
+
+      - name: build (dummy)
+        id: build
+        run: echo "dummy build ok"
+        continue-on-error: true
+
+      - name: test (dummy)
+        id: test
+        run: echo "dummy test ok"
+        continue-on-error: true
+
+  claude-judge:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: refs/pull/${{ needs.build-and-test.outputs.pr_number }}/head
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.CLAUDE_API_KEY }}
+          prompt: |
+            /dummy-review-ci ${{ needs.build-and-test.outputs.pr_number }}
+
+            install/build/testの実行結果（build-and-testジョブで実行済み）:
+            - install: ${{ needs.build-and-test.outputs.install_outcome }}
+            - build: ${{ needs.build-and-test.outputs.build_outcome }}
+            - test: ${{ needs.build-and-test.outputs.test_outcome }}
+
+            レポート作成後、以下の構成のコメント本文をファイルに書き出し、
+            `gh pr comment ${{ needs.build-and-test.outputs.pr_number }} --body-file <ファイルパス>`
+            でPRコメントとして投稿してください。
+            1. 先頭（常に見える部分）に、人間が読んで一目で分かるサマリーを書く
+               - スキルのPhase 5「判定」セクションで推奨アクションが「マージ可」の場合:
+                 「このPRは人間が確認する必要はありません」という趣旨の一文と、その理由を簡潔に書く
+               - 推奨アクションが「要修正」または「要手動確認」の場合:
+                 「このPRは人間の確認が必要です」という趣旨の一文と、その理由を簡潔に書く
+            2. その下に `<details><summary>詳細なレビューレポートを見る</summary>` ～ `</details>` で
+               折りたたみ、その中にスキルのPhase 5で作成したレビューレポート全文を格納する
+               （`<summary>`タグの外にレポート本文を出さないこと）
+
+            上記のPRコメント投稿以外のGitHub操作（Approve・マージ・ラベル付与等）は一切行わないでください。
+          claude_args: |
+            --max-turns 20
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write,Grep,Glob,WebFetch
+          show_full_output: true
