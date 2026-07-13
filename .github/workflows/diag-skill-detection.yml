@@ -1,0 +1,28 @@
+name: 'Skill Detection Diag'
+
+on:
+  workflow_dispatch:
+    inputs:
+      dummy:
+        required: false
+        type: string
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.CLAUDE_API_KEY }}
+          prompt: |
+            /hello-diag num_turns_zero_investigation
+          claude_args: |
+            --max-turns 5
+            --model claude-sonnet-5
+            --allowedTools Bash,Read,Write
+          show_full_output: true
